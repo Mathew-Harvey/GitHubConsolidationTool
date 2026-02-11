@@ -1,0 +1,12 @@
+{
+  "name": "site-capture",
+  "version": "1.0.0",
+  "description": "Automated screen capture GIF generator for deployed sites",
+  "type": "module",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}

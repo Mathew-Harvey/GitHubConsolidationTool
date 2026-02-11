@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mat Harvey — Developer Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface-hover: #1a1a28;
+            --border: #2a2a3a;
+            --text: #e8e8f0;
+            --text-muted: #8888a0;
+            --accent: #00e5a0;
+            --accent-dim: #00e5a020;
+            --accent-mid: #00e5a060;
+            --orange: #ff6b35;
+            --blue: #4dabf7;
+            --live-green: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .gradient-orb {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .orb-1 { top: -200px; right: -200px; background: var(--accent); }
+        .orb-2 { bottom: -300px; left: -200px; background: var(--orange); }
+
+        header {
+            padding: 3rem 2rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
+
+        h1 span { color: var(--accent); }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            padding: 0 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .filter-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 2px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent-dim);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1px;
+            background: var(--border);
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            border: 1px solid var(--border);
+        }
+
+        .card {
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 0;
+            background: var(--accent);
+            transition: height 0.4s ease;
+            z-index: 2;
+        }
+
+        .card:hover {
+            background: var(--surface-hover);
+        }
+
+        .card:hover::before {
+            height: 100%;
+        }
+
+        .card-preview {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        .card-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card-preview img.loaded {
+            opacity: 1;
+        }
+
+        .card-preview .preview-placeholder {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--border);
+            background: linear-gradient(135deg, var(--bg) 0%, var(--surface) 100%);
+        }
+
+        .card-preview .monogram {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-radius: 2px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+        }
+
+        .card-status {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 2;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .card-status.live {
+            background: #22c55e20;
+            color: var(--live-green);
+            border: 1px solid #22c55e40;
+        }
+
+        .card-status.live::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--live-green);
+            border-radius: 50%;
+            margin-right: 4px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .card-status.new {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border: 1px solid var(--accent-mid);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .card-body {
+            padding: 1.25rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .card-category {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 0.2rem 0.5rem;
+            border-radius: 1px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            line-height: 1.5;
+            flex: 1;
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-tech {
+            display: flex;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .tech-tag {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 0.12rem 0.45rem;
+            border-radius: 1px;
+        }
+
+        .card-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .card-links a {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .card-links a:hover { color: var(--accent); }
+        .card-links a .arrow { color: var(--accent); }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            header { padding: 2rem 1rem; }
+            .filters { padding: 0 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+
+    <header>
+        <div class="header-top">
+            <div>
+                <h1>Mat <span>Harvey</span></h1>
+                <p class="subtitle">
+                    Software Developer &middot; Marine Scientist &middot; Perth, Western Australia<br>
+                    Building elegant solutions across maritime tech, web applications, and beyond.
+                </p>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="stat-value">58</span>
+                <span class="stat-label">Projects Live</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">49</span>
+                <span class="stat-label">Previously Deployed</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">9</span>
+                <span class="stat-label">Newly Deployed</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">33</span>
+                <span class="stat-label">Technologies</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value">2</span>
+                <span class="stat-label">Categories</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="project-grid"></div>
+
+    <footer>
+        <p>Autonomously deployed by an AI pipeline &middot;
+           <a href="https://github.com/Mathew-Harvey" target="_blank">GitHub</a> &middot;
+           Built 2026-02-11</p>
+    </footer>
+
+    <script>
+    const projects = [
+  {
+    "name": "3dShip",
+    "deploy_url": "https://mathew-harvey.github.io/3dShip/",
+    "github_url": "https://github.com/Mathew-Harvey/3dShip",
+    "description": "A 3D ship visualization web application using Three.js",
+    "category": "other",
+    "tech_stack": [],
+    "status": "already-live",
+    "gif_url": ""
+  },
+  {
+    "name": "A-New-Framework-for-Understanding-Consciousness",
+    "deploy_url": "https://mathew-harvey.github.io/A-New-Framework-for-Understanding-Consciousness/",
+    "github_url": "https://github.com/Mathew-Harvey/A-New-Framework-for-Understanding-Consciousness",
+    "description": "Recursive Observation and Biochemical Weighting:    A New Framework for Understanding Consciousness",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/A-New-Framework-for-Understanding-Consciousness.gif"
+  },
+  {
+    "name": "AI-Gym",
+    "deploy_url": "https://AI-Gym.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/AI-Gym",
+    "description": "A gym to train ai on image recognition",
+    "category": "web-app",
+    "tech_stack": [
+      "Python"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/AI-Gym.gif"
+  },
+  {
+    "name": "AgenticBubbleSort",
+    "deploy_url": "https://mathew-harvey.github.io/AgenticBubbleSort/",
+    "github_url": "https://github.com/Mathew-Harvey/AgenticBubbleSort",
+    "description": "A visualization inspired by Michael Levin's work on basal cognition, showing how a bubble sort algorithm adapts when faced with different \"personality types.\" Like cells finding paths around obstacles, the system demonstrates goal-directed behavior through local interactions and simple rules.",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/AgenticBubbleSort.gif"
+  },
+  {
+    "name": "AntSimulator",
+    "deploy_url": "https://mathew-harvey.github.io/AntSimulator/",
+    "github_url": "https://github.com/Mathew-Harvey/AntSimulator",
+    "description": "An ant simulator",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/AntSimulator.gif"
+  },
+  {
+    "name": "Artificial-Life",
+    "deploy_url": "https://mathew-harvey.github.io/Artificial-Life/",
+    "github_url": "https://github.com/Mathew-Harvey/Artificial-Life",
+    "description": "A browser-based particle life simulation exploring emergent behavior through attraction and repulsion forces between different colored particle groups",
+    "category": "other",
+    "tech_stack": [
+      "JavaScript"
+    ],
+    "status": "already-live",
+    "gif_url": ""
+  },
+  {
+    "name": "Avi-fullstackcode-workshop",
+    "deploy_url": "https://mh-Avi-fullstackcode-workshop.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/Avi-fullstackcode-workshop",
+    "description": "Avi-fullstackcode-workshop",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/Avi-fullstackcode-workshop.gif"
+  },
+  {
+    "name": "BiofoulingIdGuide",
+    "deploy_url": "https://mathew-harvey.github.io/BiofoulingIdGuide/",
+    "github_url": "https://github.com/Mathew-Harvey/BiofoulingIdGuide",
+    "description": "Hull Biofouling Identification Guide - A visual field guide for identifying invasive marine species on vessel hulls, developed for commercial divers across Australia",
+    "category": "other",
+    "tech_stack": {
+      "frontend": "Pure HTML5 / CSS3 / Vanilla JavaScript",
+      "dependencies": "None (zero external dependencies)",
+      "fonts": "Google Fonts (Inter, Bitter, Source Sans 3)",
+      "state_management": "LocalStorage",
+      "build_system": "None required"
+    },
+    "status": "already-live",
+    "gif_url": "gifs/BiofoulingIdGuide.gif"
+  },
+  {
+    "name": "BlurredPhotos",
+    "deploy_url": "https://mathew-harvey.github.io/BlurredPhotos/",
+    "github_url": "https://github.com/Mathew-Harvey/BlurredPhotos",
+    "description": "A simple web application to blur photos with a C# ASP.NET Core backend and HTML/CSS/JavaScript frontend",
+    "category": "other",
+    "tech_stack": [
+      "C#"
+    ],
+    "status": "already-live",
+    "gif_url": ""
+  },
+  {
+    "name": "CancerSimulator",
+    "deploy_url": "https://mathew-harvey.github.io/CancerSimulator/",
+    "github_url": "https://github.com/Mathew-Harvey/CancerSimulator",
+    "description": "Interactive bioelectric cancer simulation based on Dr. Michael Levin's framework",
+    "category": "other",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/CancerSimulator.gif"
+  },
+  {
+    "name": "CatTranslator",
+    "deploy_url": "https://mathew-harvey.github.io/CatTranslator/",
+    "github_url": "https://github.com/Mathew-Harvey/CatTranslator",
+    "description": "A cat communication web application that plays real cat vocalizations to help users communicate with their cats",
+    "category": "other",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/CatTranslator.gif"
+  },
+  {
+    "name": "CleanHullsClearWaters",
+    "deploy_url": "https://mathew-harvey.github.io/CleanHullsClearWaters/",
+    "github_url": "https://github.com/Mathew-Harvey/CleanHullsClearWaters",
+    "description": "CleanHullsClearWaters",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/CleanHullsClearWaters.gif"
+  },
+  {
+    "name": "Document-Generator",
+    "deploy_url": "https://mathew-harvey.github.io/Document-Generator/",
+    "github_url": "https://github.com/Mathew-Harvey/Document-Generator",
+    "description": "Biofouling Management Plan (BFMP) Generator web application",
+    "category": "other",
+    "tech_stack": [
+      "JavaScript"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/Document-Generator.gif"
+  },
+  {
+    "name": "DocumentEngine",
+    "deploy_url": "https://mathew-harvey.github.io/DocumentEngine/",
+    "github_url": "https://github.com/Mathew-Harvey/DocumentEngine",
+    "description": "DocumentEngine",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/DocumentEngine.gif"
+  },
+  {
+    "name": "ElodieBook_One",
+    "deploy_url": "https://mathew-harvey.github.io/ElodieBook_One/",
+    "github_url": "https://github.com/Mathew-Harvey/ElodieBook_One",
+    "description": "An interactive digital storybook featuring a children's story about a tawny frogmouth owl making snake stew. The project includes AI-generated illustrations and page-turning animations.",
+    "category": "other",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/ElodieBook_One.gif"
+  },
+  {
+    "name": "ElodieBook_Two",
+    "deploy_url": "https://mathew-harvey.github.io/ElodieBook_Two/",
+    "github_url": "https://github.com/Mathew-Harvey/ElodieBook_Two",
+    "description": "An interactive digital children's storybook with page-turning animations created from handwritten story by a 6-year-old",
+    "category": "other",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/ElodieBook_Two.gif"
+  },
+  {
+    "name": "ExtremeLimitFilms",
+    "deploy_url": "https://mathew-harvey.github.io/ExtremeLimitFilms/",
+    "github_url": "https://github.com/Mathew-Harvey/ExtremeLimitFilms",
+    "description": "A homepage for Extreme Limit Films",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/ExtremeLimitFilms.gif"
+  },
+  {
+    "name": "FPVTrackPlanner",
+    "deploy_url": "https://mathew-harvey.github.io/FPVTrackPlanner/",
+    "github_url": "https://github.com/Mathew-Harvey/FPVTrackPlanner",
+    "description": "FPVTrackPlanner",
+    "category": "other",
+    "tech_stack": {
+      "frontend": "HTML, CSS, JavaScript",
+      "3d_engine": "Three.js r128",
+      "rendering": "WebGL",
+      "fonts": [
+        "Exo 2",
+        "Bebas Neue"
+      ]
+    },
+    "status": "already-live",
+    "gif_url": "gifs/FPVTrackPlanner.gif"
+  },
+  {
+    "name": "FamilyBudgetTracking",
+    "deploy_url": "https://mh-FamilyBudgetTracking.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/FamilyBudgetTracking",
+    "description": "FamilyBudgetTracking",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/FamilyBudgetTracking.gif"
+  },
+  {
+    "name": "FamilyHiking",
+    "deploy_url": "https://mathew-harvey.github.io/FamilyHiking/",
+    "github_url": "https://github.com/Mathew-Harvey/FamilyHiking",
+    "description": "A family hiking adventure website for the Bibbulmun Track in Western Australia",
+    "category": "other",
+    "tech_stack": [
+      "HTML",
+      "TailwindCSS",
+      "Leaflet.js",
+      "Swiper.js",
+      "AOS",
+      "Lucide icons",
+      "Canvas Confetti"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/FamilyHiking.gif"
+  },
+  {
+    "name": "FormSync",
+    "deploy_url": "https://mathew-harvey.github.io/FormSync/",
+    "github_url": "https://github.com/Mathew-Harvey/FormSync",
+    "description": "An idea for a collaborative form with video sharing",
+    "category": "web-app",
+    "tech_stack": [
+      "JavaScript"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/FormSync.gif"
+  },
+  {
+    "name": "FoulingCostCalculator",
+    "deploy_url": "https://mathew-harvey.github.io/FoulingCostCalculator/",
+    "github_url": "https://github.com/Mathew-Harvey/FoulingCostCalculator",
+    "description": "This calculator extends the research presented in \"Quantitative assessment of increased frictional drag due to hull fouling using underwater surface scanning\" (Kevin et al., 2024), making their findings accessible for practical use.",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/FoulingCostCalculator.gif"
+  },
+  {
+    "name": "GameOfLife",
+    "deploy_url": "https://mathew-harvey.github.io/GameOfLife/",
+    "github_url": "https://github.com/Mathew-Harvey/GameOfLife",
+    "description": "GameOfLife",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/GameOfLife.gif"
+  },
+  {
+    "name": "HouseSitter",
+    "deploy_url": "https://mathew-harvey.github.io/HouseSitter/",
+    "github_url": "https://github.com/Mathew-Harvey/HouseSitter",
+    "description": "A single-page HTML guide for house and pet sitters at 20 Eldora Cr, Falcon 6210 from Jan 26 - Feb 8, 2026. Contains emergency contacts, pet care instructions for 2 dogs (Bunny, Angus) and 1 cat (Max), fish tank feeding schedules, WiFi credentials, bin schedule, garden/pool maintenance tasks, vet information, and flight details.",
+    "category": "other",
+    "tech_stack": [
+      "HTML5",
+      "CSS3",
+      "Google Fonts (Fraunces, DM Sans)"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/HouseSitter.gif"
+  },
+  {
+    "name": "IWC-Approval-Portal",
+    "deploy_url": "https://mathew-harvey.github.io/IWC-Approval-Portal/",
+    "github_url": "https://github.com/Mathew-Harvey/IWC-Approval-Portal",
+    "description": "In-Water Cleaning Notification Package Generator for Franmarine Underwater Services",
+    "category": "other",
+    "tech_stack": {
+      "frontend": [
+        "Vanilla JavaScript",
+        "Handlebars.js",
+        "CSS3"
+      ],
+      "backend": [
+        "Node.js",
+        "Express.js"
+      ],
+      "database": "PostgreSQL 17 with Prisma ORM",
+      "authentication": "Clerk (replacing Google OAuth)",
+      "hosting": "Render.com"
+    },
+    "status": "already-live",
+    "gif_url": "gifs/IWC-Approval-Portal.gif"
+  },
+  {
+    "name": "IWHCManualCompanionApp",
+    "deploy_url": "https://mathew-harvey.github.io/IWHCManualCompanionApp/",
+    "github_url": "https://github.com/Mathew-Harvey/IWHCManualCompanionApp",
+    "description": "A companion app for the IWHC training manual",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/IWHCManualCompanionApp.gif"
+  },
+  {
+    "name": "JapanItinery",
+    "deploy_url": "https://mathew-harvey.github.io/JapanItinery/",
+    "github_url": "https://github.com/Mathew-Harvey/JapanItinery",
+    "description": "A mobile-first itinerary planner for a 4-day Tokyo family trip with interactive features including translation tools, currency conversion, activity management, and dark mode",
+    "category": "other",
+    "tech_stack": [
+      "JavaScript"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/JapanItinery.gif"
+  },
+  {
+    "name": "KoiRunner",
+    "deploy_url": "https://mathew-harvey.github.io/KoiRunner/",
+    "github_url": "https://github.com/Mathew-Harvey/KoiRunner",
+    "description": "An endless runner game where you control a koi fish swimming through an underwater environment, avoiding obstacles and collecting larvae",
+    "category": "other",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/KoiRunner.gif"
+  },
+  {
+    "name": "MarineStream",
+    "deploy_url": "https://mathew-harvey.github.io/MarineStream/",
+    "github_url": "https://github.com/Mathew-Harvey/MarineStream",
+    "description": "MarineStream",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/MarineStream.gif"
+  },
+  {
+    "name": "MarineStream-Workspace",
+    "deploy_url": "https://MarineStream-Workspace.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/MarineStream-Workspace",
+    "description": "Unified maritime biofouling management portal with real-time fleet tracking, job management, and operational dashboards",
+    "category": "other",
+    "tech_stack": {
+      "frontend": [
+        "HTML",
+        "CSS",
+        "JavaScript (Vanilla)"
+      ],
+      "backend": [
+        "Node.js",
+        "Express"
+      ],
+      "database": "PostgreSQL",
+      "authentication": "Clerk",
+      "realtime": [
+        "WebSocket",
+        "AISstream.io API"
+      ],
+      "maps": "Mapbox GL JS / Leaflet",
+      "deployment": "Render"
+    },
+    "status": "already-live",
+    "gif_url": "gifs/MarineStream-Workspace.gif"
+  },
+  {
+    "name": "MarineStreamLandingPage",
+    "deploy_url": "https://mathew-harvey.github.io/MarineStreamLandingPage/",
+    "github_url": "https://github.com/Mathew-Harvey/MarineStreamLandingPage",
+    "description": "Digital multi-party vessel maintenance platform landing page",
+    "category": "other",
+    "tech_stack": {
+      "html": "Single page website",
+      "css": "Custom CSS with CSS variables, responsive design",
+      "javascript": "Vanilla JS for smooth scrolling and navigation effects",
+      "fonts": "Google Fonts (Inter)",
+      "form_handler": "FormSubmit.co"
+    },
+    "status": "already-live",
+    "gif_url": "gifs/MarineStreamLandingPage.gif"
+  },
+  {
+    "name": "Mat-Portfolio-2025",
+    "deploy_url": "https://mathew-harvey.github.io/Mat-Portfolio-2025/",
+    "github_url": "https://github.com/Mathew-Harvey/Mat-Portfolio-2025",
+    "description": "a portfolio designed and written by claude.ai",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/Mat-Portfolio-2025.gif"
+  },
+  {
+    "name": "Moltbook-Throng",
+    "deploy_url": "https://mathew-harvey.github.io/Moltbook-Throng/",
+    "github_url": "https://github.com/Mathew-Harvey/Moltbook-Throng",
+    "description": "Real-time AI agent visualization for the Moltbook social platform, displaying animated pixel creatures representing different AI models interacting across various submolts (communities)",
+    "category": "other",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/Moltbook-Throng.gif"
+  },
+  {
+    "name": "MoneyMachine",
+    "deploy_url": "https://mh-MoneyMachine.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/MoneyMachine",
+    "description": "MoneyMachine",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/MoneyMachine.gif"
+  },
+  {
+    "name": "MongoDbCloneLocal",
+    "deploy_url": "https://mh-MongoDbCloneLocal.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/MongoDbCloneLocal",
+    "description": "MongoDbCloneLocal",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/MongoDbCloneLocal.gif"
+  },
+  {
+    "name": "MsSubscriptionUI",
+    "deploy_url": "https://mh-MsSubscriptionUI.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/MsSubscriptionUI",
+    "description": "MsSubscriptionUI",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/MsSubscriptionUI.gif"
+  },
+  {
+    "name": "MyStuffHere",
+    "deploy_url": "https://mathew-harvey.github.io/MyStuffHere/",
+    "github_url": "https://github.com/Mathew-Harvey/MyStuffHere",
+    "description": "A collection of software i've written",
+    "category": "web-app",
+    "tech_stack": [
+      "JavaScript"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/MyStuffHere.gif"
+  },
+  {
+    "name": "NetConnectionMonitor",
+    "deploy_url": "https://mathew-harvey.github.io/NetConnectionMonitor/",
+    "github_url": "https://github.com/Mathew-Harvey/NetConnectionMonitor",
+    "description": "To monitor your internet connection over time",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/NetConnectionMonitor.gif"
+  },
+  {
+    "name": "One-Human-Life-React",
+    "deploy_url": "https://mathew-harvey.github.io/One-Human-Life-React/",
+    "github_url": "https://github.com/Mathew-Harvey/One-Human-Life-React",
+    "description": "A visualization app that displays a human lifespan in weeks (108 years × 47 weeks) as a grid of colored cells based on user's age",
+    "category": "other",
+    "tech_stack": [
+      "JavaScript"
+    ],
+    "status": "already-live",
+    "gif_url": ""
+  },
+  {
+    "name": "OnlyPrints",
+    "deploy_url": "https://mathew-harvey.github.io/OnlyPrints/",
+    "github_url": "https://github.com/Mathew-Harvey/OnlyPrints",
+    "description": "for Tim",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/OnlyPrints.gif"
+  },
+  {
+    "name": "SimpleImageComression",
+    "deploy_url": "https://mathew-harvey.github.io/SimpleImageComression/",
+    "github_url": "https://github.com/Mathew-Harvey/SimpleImageComression",
+    "description": "Local browser-based bulk image compressor that compresses images to approximately 300KB and packages them into a ZIP file",
+    "category": "other",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/SimpleImageComression.gif"
+  },
+  {
+    "name": "SkyePortfolio",
+    "deploy_url": "https://mathew-harvey.github.io/SkyePortfolio/",
+    "github_url": "https://github.com/Mathew-Harvey/SkyePortfolio",
+    "description": "SkyePortfolio",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/SkyePortfolio.gif"
+  },
+  {
+    "name": "StagesOfMind",
+    "deploy_url": "https://mathew-harvey.github.io/StagesOfMind/",
+    "github_url": "https://github.com/Mathew-Harvey/StagesOfMind",
+    "description": "Discover where you are on the journey of cognitive expansion and learn how to accelerate your growth through the seven developmental stages based on Robert Kegan's and Joscha Bach's frameworks.",
+    "category": "web-app",
+    "tech_stack": [
+      "CSS"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/StagesOfMind.gif"
+  },
+  {
+    "name": "StringSearchReplace",
+    "deploy_url": "https://mh-StringSearchReplace.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/StringSearchReplace",
+    "description": "StringSearchReplace",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/StringSearchReplace.gif"
+  },
+  {
+    "name": "TheHullTruth",
+    "deploy_url": "https://mathew-harvey.github.io/TheHullTruth/",
+    "github_url": "https://github.com/Mathew-Harvey/TheHullTruth",
+    "description": "Interactive calculator visualizing the impact of hull fouling on vessel fuel consumption & costs. Based on 2024 University of Melbourne research showing even light fouling increases fuel use by 10%. Helps maritime operators make data-driven decisions about hull maintenance.",
+    "category": "other",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/TheHullTruth.gif"
+  },
+  {
+    "name": "UUID_Check_and_Correct",
+    "deploy_url": "https://mh-UUID_Check_and_Correct.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/UUID_Check_and_Correct",
+    "description": "UUID_Check_and_Correct",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/UUID_Check_and_Correct.gif"
+  },
+  {
+    "name": "UUID_find_replace",
+    "deploy_url": "https://mh-UUID_find_replace.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/UUID_find_replace",
+    "description": "UUID_find_replace",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/UUID_find_replace.gif"
+  },
+  {
+    "name": "VirtualPropertyTour",
+    "deploy_url": "https://mathew-harvey.github.io/VirtualPropertyTour/",
+    "github_url": "https://github.com/Mathew-Harvey/VirtualPropertyTour",
+    "description": "VirtualPropertyTour",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/VirtualPropertyTour.gif"
+  },
+  {
+    "name": "VrSimRacingCalc",
+    "deploy_url": "https://mathew-harvey.github.io/VrSimRacingCalc/",
+    "github_url": "https://github.com/Mathew-Harvey/VrSimRacingCalc",
+    "description": "A calculator for modeling gpu requirements for vr sim racing",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/VrSimRacingCalc.gif"
+  },
+  {
+    "name": "WebDiskAnalyser",
+    "deploy_url": "https://mathew-harvey.github.io/WebDiskAnalyser/",
+    "github_url": "https://github.com/Mathew-Harvey/WebDiskAnalyser",
+    "description": "WebDiskAnalyser",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/WebDiskAnalyser.gif"
+  },
+  {
+    "name": "WestCoastMultiRotorClub",
+    "deploy_url": "https://mathew-harvey.github.io/WestCoastMultiRotorClub/",
+    "github_url": "https://github.com/Mathew-Harvey/WestCoastMultiRotorClub",
+    "description": "Drone racing club website for Western Australia",
+    "category": "other",
+    "tech_stack": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/WestCoastMultiRotorClub.gif"
+  },
+  {
+    "name": "beatbox-craft",
+    "deploy_url": "https://mathew-harvey.github.io/beatbox-craft/",
+    "github_url": "https://github.com/Mathew-Harvey/beatbox-craft",
+    "description": "beatbox-craft",
+    "category": "web-app",
+    "tech_stack": [
+      "TypeScript"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/beatbox-craft.gif"
+  },
+  {
+    "name": "bfmpGenerator",
+    "deploy_url": "https://mathew-harvey.github.io/bfmpGenerator/",
+    "github_url": "https://github.com/Mathew-Harvey/bfmpGenerator",
+    "description": "This code provides a fully client-side solution for generating a Biofouling Management Plan (BFMP). Users fill out a two-column form, optionally upload a vessel photo, and instantly receive a print-ready document built via Handlebars.js. The final BFMP includes inspection schedules, record-keeping templates, and is truly serverless, for compliance.",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/bfmpGenerator.gif"
+  },
+  {
+    "name": "dotnetAPILesson",
+    "deploy_url": "https://mh-dotnetAPILesson.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/dotnetAPILesson",
+    "description": "dotnetAPILesson",
+    "category": "other",
+    "tech_stack": [],
+    "status": "deployed",
+    "gif_url": "gifs/dotnetAPILesson.gif"
+  },
+  {
+    "name": "iwhc_franmarine",
+    "deploy_url": "https://mathew-harvey.github.io/iwhc_franmarine/",
+    "github_url": "https://github.com/Mathew-Harvey/iwhc_franmarine",
+    "description": "a client side webpage to advertise our in water hull cleaning capability",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/iwhc_franmarine.gif"
+  },
+  {
+    "name": "temp-msdt-for-review",
+    "deploy_url": "https://temp-msdt-for-review.onrender.com",
+    "github_url": "https://github.com/Mathew-Harvey/temp-msdt-for-review",
+    "description": "A comprehensive web platform for marine vessel maintenance, underwater inspection, and biofouling management solutions",
+    "category": "other",
+    "tech_stack": [
+      "JavaScript"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/temp-msdt-for-review.gif"
+  },
+  {
+    "name": "tempForKel",
+    "deploy_url": "https://mathew-harvey.github.io/tempForKel/",
+    "github_url": "https://github.com/Mathew-Harvey/tempForKel",
+    "description": "For Kelly",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/tempForKel.gif"
+  },
+  {
+    "name": "tempPricing",
+    "deploy_url": "https://mathew-harvey.github.io/tempPricing/",
+    "github_url": "https://github.com/Mathew-Harvey/tempPricing",
+    "description": "tempPricing",
+    "category": "web-app",
+    "tech_stack": [
+      "HTML"
+    ],
+    "status": "already-live",
+    "gif_url": "gifs/tempPricing.gif"
+  }
+];
+
+    // Build category filters
+    const allCats = [...new Set(projects.map(p => p.category).filter(Boolean))].sort();
+    const filtersDiv = document.getElementById('filters');
+
+    const allBtn = document.createElement('button');
+    allBtn.className = 'filter-btn active';
+    allBtn.textContent = 'All (' + projects.length + ')';
+    allBtn.onclick = () => filterBy('all');
+    filtersDiv.appendChild(allBtn);
+
+    allCats.forEach(cat => {
+        const count = projects.filter(p => p.category === cat).length;
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.textContent = cat + ' (' + count + ')';
+        btn.dataset.category = cat;
+        btn.onclick = () => filterBy(cat);
+        filtersDiv.appendChild(btn);
+    });
+
+    function filterBy(category) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        if (category === 'all') {
+            document.querySelector('.filter-btn').classList.add('active');
+        } else {
+            document.querySelector('[data-category="' + category + '"]').classList.add('active');
+        }
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.display = (category === 'all' || card.dataset.category === category) ? '' : 'none';
+        });
+    }
+
+    // Render cards
+    const grid = document.getElementById('project-grid');
+    projects.forEach((p, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.category = p.category || '';
+
+        const techHtml = (p.tech_stack || [])
+            .map(t => '<span class="tech-tag">' + t + '</span>').join('');
+
+        const liveLink = p.deploy_url
+            ? '<a href="' + p.deploy_url + '" target="_blank"><span class="arrow">&#8594;</span> Live Site</a>' : '';
+
+        const statusBadge = p.status === 'already-live'
+            ? '<span class="card-status live">Live</span>'
+            : '<span class="card-status new">New Deploy</span>';
+
+        const hasGif = p.gif_url && p.gif_url.length > 0;
+        const monogram = p.name.replace(/[-_]/g, ' ').split(' ')
+            .map(w => (w[0] || '')).join('').toUpperCase().slice(0, 3);
+
+        const displayName = p.name.replace(/[-_]/g, ' ');
+
+        const previewHtml = hasGif
+            ? '<div class="card-preview">' +
+                statusBadge +
+                '<div class="preview-placeholder"><div class="monogram">' + monogram + '</div></div>' +
+                '<img data-src="' + p.gif_url + '" alt="' + displayName + ' preview" loading="lazy">' +
+              '</div>'
+            : '<div class="card-preview">' +
+                statusBadge +
+                '<div class="preview-placeholder"><div class="monogram">' + monogram + '</div></div>' +
+              '</div>';
+
+        card.innerHTML =
+            previewHtml +
+            '<div class="card-body">' +
+                '<div class="card-header">' +
+                    '<span class="card-name">' + displayName + '</span>' +
+                    '<span class="card-category">' + (p.category || 'other') + '</span>' +
+                '</div>' +
+                '<p class="card-desc">' + (p.description || 'No description') + '</p>' +
+                '<div class="card-tech">' + techHtml + '</div>' +
+                '<div class="card-links">' +
+                    '<a href="' + p.github_url + '" target="_blank"><span class="arrow">&#8594;</span> Source</a>' +
+                    liveLink +
+                '</div>' +
+            '</div>';
+        grid.appendChild(card);
+    });
+
+    // Lazy-load GIF images
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target.querySelector('img[data-src]');
+                if (img) {
+                    img.src = img.dataset.src;
+                    img.onload = () => img.classList.add('loaded');
+                    img.removeAttribute('data-src');
+                }
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { rootMargin: '300px' });
+
+    document.querySelectorAll('.card-preview').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
