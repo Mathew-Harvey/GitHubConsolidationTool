@@ -58,7 +58,12 @@ async function captureSite(browser, url, name) {
   await page.setViewport(VIEWPORT);
 
   try {
-    await page.goto(url, { waitUntil: "networkidle2", timeout: 30_000 });
+    try {
+      await page.goto(url, { waitUntil: "networkidle2", timeout: 30_000 });
+    } catch {
+      // Some sites keep long-lived network connections open; fall back so capture can proceed.
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
+    }
     // Let animations / lazy images settle
     await sleep(2000);
 

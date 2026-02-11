@@ -191,6 +191,20 @@
             overflow: hidden;
         }
 
+        /* Tone down visual noise; reveal motion detail on hover */
+        .card-preview::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 12, 22, 0.34);
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .card:hover .card-preview::after {
+            opacity: 0.08;
+        }
+
         .card-preview img {
             width: 100%;
             height: 100%;
@@ -428,7 +442,7 @@
     "category": "other",
     "tech_stack": [],
     "status": "already-live",
-    "gif_url": ""
+    "gif_url": "gifs/3dShip.gif"
   },
   {
     "name": "A-New-Framework-for-Understanding-Consciousness",
@@ -441,18 +455,6 @@
     ],
     "status": "already-live",
     "gif_url": "gifs/A-New-Framework-for-Understanding-Consciousness.gif"
-  },
-  {
-    "name": "AI-Gym",
-    "deploy_url": "https://AI-Gym.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/AI-Gym",
-    "description": "A gym to train ai on image recognition",
-    "category": "web-app",
-    "tech_stack": [
-      "Python"
-    ],
-    "status": "already-live",
-    "gif_url": "gifs/AI-Gym.gif"
   },
   {
     "name": "AgenticBubbleSort",
@@ -488,17 +490,7 @@
       "JavaScript"
     ],
     "status": "already-live",
-    "gif_url": ""
-  },
-  {
-    "name": "Avi-fullstackcode-workshop",
-    "deploy_url": "https://mh-Avi-fullstackcode-workshop.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/Avi-fullstackcode-workshop",
-    "description": "Avi-fullstackcode-workshop",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/Avi-fullstackcode-workshop.gif"
+    "gif_url": "gifs/Artificial-Life.gif"
   },
   {
     "name": "BiofoulingIdGuide",
@@ -526,7 +518,7 @@
       "C#"
     ],
     "status": "already-live",
-    "gif_url": ""
+    "gif_url": "gifs/BlurredPhotos.gif"
   },
   {
     "name": "CancerSimulator",
@@ -641,16 +633,6 @@
     },
     "status": "already-live",
     "gif_url": "gifs/FPVTrackPlanner.gif"
-  },
-  {
-    "name": "FamilyBudgetTracking",
-    "deploy_url": "https://mh-FamilyBudgetTracking.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/FamilyBudgetTracking",
-    "description": "FamilyBudgetTracking",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/FamilyBudgetTracking.gif"
   },
   {
     "name": "FamilyHiking",
@@ -860,36 +842,6 @@
     "gif_url": "gifs/Moltbook-Throng.gif"
   },
   {
-    "name": "MoneyMachine",
-    "deploy_url": "https://mh-MoneyMachine.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/MoneyMachine",
-    "description": "MoneyMachine",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/MoneyMachine.gif"
-  },
-  {
-    "name": "MongoDbCloneLocal",
-    "deploy_url": "https://mh-MongoDbCloneLocal.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/MongoDbCloneLocal",
-    "description": "MongoDbCloneLocal",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/MongoDbCloneLocal.gif"
-  },
-  {
-    "name": "MsSubscriptionUI",
-    "deploy_url": "https://mh-MsSubscriptionUI.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/MsSubscriptionUI",
-    "description": "MsSubscriptionUI",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/MsSubscriptionUI.gif"
-  },
-  {
     "name": "MyStuffHere",
     "deploy_url": "https://mathew-harvey.github.io/MyStuffHere/",
     "github_url": "https://github.com/Mathew-Harvey/MyStuffHere",
@@ -923,7 +875,7 @@
       "JavaScript"
     ],
     "status": "already-live",
-    "gif_url": ""
+    "gif_url": "gifs/One-Human-Life-React.gif"
   },
   {
     "name": "OnlyPrints",
@@ -974,16 +926,6 @@
     "gif_url": "gifs/StagesOfMind.gif"
   },
   {
-    "name": "StringSearchReplace",
-    "deploy_url": "https://mh-StringSearchReplace.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/StringSearchReplace",
-    "description": "StringSearchReplace",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/StringSearchReplace.gif"
-  },
-  {
     "name": "TheHullTruth",
     "deploy_url": "https://mathew-harvey.github.io/TheHullTruth/",
     "github_url": "https://github.com/Mathew-Harvey/TheHullTruth",
@@ -994,26 +936,6 @@
     ],
     "status": "already-live",
     "gif_url": "gifs/TheHullTruth.gif"
-  },
-  {
-    "name": "UUID_Check_and_Correct",
-    "deploy_url": "https://mh-UUID_Check_and_Correct.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/UUID_Check_and_Correct",
-    "description": "UUID_Check_and_Correct",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/UUID_Check_and_Correct.gif"
-  },
-  {
-    "name": "UUID_find_replace",
-    "deploy_url": "https://mh-UUID_find_replace.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/UUID_find_replace",
-    "description": "UUID_find_replace",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/UUID_find_replace.gif"
   },
   {
     "name": "VirtualPropertyTour",
@@ -1088,16 +1010,6 @@
     ],
     "status": "already-live",
     "gif_url": "gifs/bfmpGenerator.gif"
-  },
-  {
-    "name": "dotnetAPILesson",
-    "deploy_url": "https://mh-dotnetAPILesson.onrender.com",
-    "github_url": "https://github.com/Mathew-Harvey/dotnetAPILesson",
-    "description": "dotnetAPILesson",
-    "category": "other",
-    "tech_stack": [],
-    "status": "deployed",
-    "gif_url": "gifs/dotnetAPILesson.gif"
   },
   {
     "name": "iwhc_franmarine",
@@ -1188,7 +1100,10 @@
         card.className = 'card';
         card.dataset.category = p.category || '';
 
-        const techHtml = (p.tech_stack || [])
+        const techList = Array.isArray(p.tech_stack)
+            ? p.tech_stack
+            : (typeof p.tech_stack === 'string' && p.tech_stack ? [p.tech_stack] : []);
+        const techHtml = techList
             .map(t => '<span class="tech-tag">' + t + '</span>').join('');
 
         const liveLink = p.deploy_url
@@ -1238,8 +1153,14 @@
             if (entry.isIntersecting) {
                 const img = entry.target.querySelector('img[data-src]');
                 if (img) {
+                    const markLoaded = () => {
+                        img.classList.add('loaded');
+                        const placeholder = entry.target.querySelector('.preview-placeholder');
+                        if (placeholder) placeholder.style.display = 'none';
+                    };
+                    img.onload = markLoaded;
                     img.src = img.dataset.src;
-                    img.onload = () => img.classList.add('loaded');
+                    if (img.complete) markLoaded();
                     img.removeAttribute('data-src');
                 }
                 observer.unobserve(entry.target);

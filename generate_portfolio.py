@@ -233,6 +233,20 @@ def main():
             overflow: hidden;
         }}
 
+        /* Tone down visual noise; reveal motion detail on hover */
+        .card-preview::after {{
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 12, 22, 0.34);
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }}
+
+        .card:hover .card-preview::after {{
+            opacity: 0.08;
+        }}
+
         .card-preview img {{
             width: 100%;
             height: 100%;
@@ -502,7 +516,10 @@ def main():
         card.className = 'card';
         card.dataset.category = p.category || '';
 
-        const techHtml = (p.tech_stack || [])
+        const techList = Array.isArray(p.tech_stack)
+            ? p.tech_stack
+            : (typeof p.tech_stack === 'string' && p.tech_stack ? [p.tech_stack] : []);
+        const techHtml = techList
             .map(t => '<span class="tech-tag">' + t + '</span>').join('');
 
         const liveLink = p.deploy_url
@@ -552,8 +569,14 @@ def main():
             if (entry.isIntersecting) {{
                 const img = entry.target.querySelector('img[data-src]');
                 if (img) {{
+                    const markLoaded = () => {{
+                        img.classList.add('loaded');
+                        const placeholder = entry.target.querySelector('.preview-placeholder');
+                        if (placeholder) placeholder.style.display = 'none';
+                    }};
+                    img.onload = markLoaded;
                     img.src = img.dataset.src;
-                    img.onload = () => img.classList.add('loaded');
+                    if (img.complete) markLoaded();
                     img.removeAttribute('data-src');
                 }}
                 observer.unobserve(entry.target);
