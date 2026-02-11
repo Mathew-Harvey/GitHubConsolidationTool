@@ -1311,7 +1311,12 @@ def generate_portfolio(manifest: dict):
             ProjectStatus.COMPLETED.value,
             ProjectStatus.ALREADY_LIVE.value,
         ):
-            projects.append(data)
+            project_data = dict(data)
+            if not project_data.get("gif_url"):
+                gif_candidate = WORKSPACE / "gifs" / f"{name}.gif"
+                if gif_candidate.exists():
+                    project_data["gif_url"] = f"gifs/{name}.gif"
+            projects.append(project_data)
 
     # Sort by category then name
     projects.sort(key=lambda p: (p.get("category", "zzz"), p.get("name", "")))

@@ -15,7 +15,7 @@ package-lock.json
 
 # Workspace output
 auto-deployer-workspace/
-gifs/
+
 
 # OS
 .DS_Store
