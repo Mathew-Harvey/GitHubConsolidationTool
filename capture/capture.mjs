@@ -200,8 +200,21 @@ async function main() {
     ok ? captured++ : failed++;
   }
 
+  // Keep manifest in sync when capture is run standalone.
+  // This ensures downstream portfolio generation sees available GIF previews.
+  for (const [name, project] of Object.entries(projects)) {
+    if (!["deployed", "already-live"].includes(project.status)) continue;
+    const gifPath = path.join(outputDir, `${name}.gif`);
+    if (fs.existsSync(gifPath)) {
+      project.gif_url = `gifs/${name}.gif`;
+    }
+  }
+  manifest.projects = projects;
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), "utf-8");
+
   await browser.close();
-  console.log(`\n📸 Done: ${captured} captured, ${failed} failed\n`);
+  console.log(`\n📸 Done: ${captured} captured, ${failed} failed`);
+  console.log(`📝 Manifest updated: ${manifestPath}\n`);
 }
 
 function sleep(ms) {
